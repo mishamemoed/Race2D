@@ -11,7 +11,7 @@ function deviceReady() {
     const world = new World({
         width: window.innerWidth * ratio,
         height: window.innerHeight * ratio
-    }, LEVELS.DEV);
+    }, LEVELS.ROAD_TEST);
     world.controls = controls;
     world.start();
     new DatConfig(world);
