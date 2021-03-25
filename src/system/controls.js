@@ -9,7 +9,7 @@ export default function controls(world) {
         world.player.decreaseSpeed();
     }
 
-    if (world.player.speed > 0) {
+    if (world.player.speed !== 0) {
         turns(world);
     }
 }

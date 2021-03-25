@@ -1,6 +1,7 @@
 import Camera from "../system/camera";
 import Car from "./car";
 import Road from "./road";
+import Wall from "./wall";
 
 export default class World {
     constructor(options, initLevel) {
@@ -12,7 +13,7 @@ export default class World {
         this.background;
         this.level;
         this.camera;
-        this.player = new Car({
+        this.player = this.createCar({
             imageSrc: "images/car-test.png",
             width: 53,
             height: 100,
@@ -22,15 +23,27 @@ export default class World {
             y: 50
         });
         this.roads = []
+        this.walls = []
         this.loadLevel(initLevel);
+    }
+
+    createWall(options){
+        const wall = new Wall({...options, world: this})
+        return wall
+    }
+
+    createCar(options){
+        const car = new Car({...options, world: this})
+        return car
     }
 
     loadLevel(level) {
         this.level = level;
-        const { backgroundSrc, roads } = level;
+        const { backgroundSrc, roads, walls } = level;
         this.background = new Image();
         this.background.src = backgroundSrc;
         this.roads = roads.map(road => this.createRoad(road))
+        this.walls = walls.map(wall => this.createWall(wall))
         this.createCamera();
     }
 
@@ -53,13 +66,14 @@ export default class World {
     render = () => {
         const { isRunning, canvas, options,
             background, camera, player, controls } = this;
-        const { roads } = this
+        const { roads, walls } = this
         const { width, height } = options;
         if (isRunning) requestAnimationFrame(this.render);
         canvas.save();
         canvas.translate(-camera.x, -camera.y);
         canvas.drawImage(background, 0, 0);
         roads.forEach(road => road.render(canvas))
+        walls.forEach(wall => wall.render(canvas))
         player.render(canvas);
         camera.update();
         canvas.restore();

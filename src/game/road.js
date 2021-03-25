@@ -1,7 +1,6 @@
 import { BaseObject } from "../system/baseObject";
 
 export const SFC = {
-    BETA_MATERIAL: 1,
     DRY_ASPHALT: 0.5,
     WET_ASPHALT: 0.35,
     DRY_DIRT_ROAD: 0.4,

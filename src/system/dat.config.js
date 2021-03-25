@@ -15,5 +15,8 @@ export default class DatConfig {
         playerFolder.add(player, "x", 0, level.width).listen();
         playerFolder.add(player, "y", 0, level.height).listen();
         playerFolder.add(player, "speed", 0.00000000001, level.maxSpeed).listen();
-     }
+        playerFolder.add(player, "slidingFrictionCoefficient").listen();
+        playerFolder.add(player, "angle").listen();
+
+    }
 }

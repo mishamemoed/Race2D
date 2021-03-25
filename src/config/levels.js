@@ -5,12 +5,21 @@ export const LEVELS = {
         backgroundSrc: 'images/track.jpg',
         width: 1061,
         height: 1500,
-        roads: []
+        roads: [],
+        walls: []
     },
     ROAD_TEST: {
         backgroundSrc: ' images/background.png',
         width: 1600,
         height:1000,
+        walls: [{
+            x: 10,
+            y: 10,
+            width:1580,
+            height:50,
+            color:"#ff0000",
+            angle: 30
+        }],
         roads: [{
            ...ROADS.ICE_ROAD,
             x: 10,
@@ -40,7 +49,7 @@ export const LEVELS = {
              height: 200
          },
          {
-            ...ROADS.WET_ASPHALT_ROAD,
+            ...ROADS.WET_DIRT_ROAD,
              x: 10,
              y: 850,
              width: 1500,
