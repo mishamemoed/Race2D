@@ -17,10 +17,7 @@ export default class World {
             imageSrc: "images/car-test.png",
             width: 53,
             height: 100,
-            speed: 0,
-            angle: 180,
-            x: 50,
-            y: 50
+            speed: 0
         });
         this.roads = []
         this.walls = []
@@ -39,11 +36,14 @@ export default class World {
 
     loadLevel(level) {
         this.level = level;
-        const { backgroundSrc, roads, walls } = level;
+        const { backgroundSrc, roads, walls, spawn } = level;
         this.background = new Image();
         this.background.src = backgroundSrc;
         this.roads = roads.map(road => this.createRoad(road))
         this.walls = walls.map(wall => this.createWall(wall))
+        this.player.x = spawn.x
+        this.player.y = spawn.y
+        this.player.angle = spawn.angle 
         this.createCamera();
     }
 

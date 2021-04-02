@@ -53,20 +53,49 @@ export default class Car extends BaseObject {
         });
         for (let wall of walls) {
             if (this.collision(wall)) {
-                this.discarding()
+                let edge = this.getEdge(wall)
+                this.discarding(edge)
                 return true
             }
         }
     }
-    discarding() {
-        console.log("Ты был в школе вождения?")
-        let i = setInterval(() => {
-            this.decreaseSpeed()
-            this.turnRight(5)
-        }, 10)
-            setTimeout(() => {
-                clearInterval(i)
-            }, 100)
 
-        }
+    getEdge(object) {
+        let r1 = object.isPointInObject(this.getRightBottomPoint());
+        let r2 = object.isPointInObject(this.getLeftBottomPoint());
+        let r3 = object.isPointInObject(this.getLeftTopPoint());
+        let r4 = object.isPointInObject(this.getRightTopPoint());
+        if (r1) return "right-bottom"
+        if (r2) return "left-bottom"
+        if (r3) return "left-top"
+        if (r4) return "right-top"
+    }
+
+    discarding(edge) {
+        console.log("Бабах");
+        let i = setInterval(() => {
+            switch (edge) {
+                case "right-bottom":
+                    this.increaseSpeed();
+                    this.turnRight(5);
+                    break
+                case "left-bottom":
+                    this.increaseSpeed();
+                    this.turnLeft(5);
+                    break
+                case "left-top":
+                    this.decreaseSpeed();
+                    this.turnRight(5);
+                    break
+                case "right-top":
+                    this.decreaseSpeed();
+                    this.turnLeft(5);
+                    break
+            }
+
+        }, 10);
+        setTimeout(() => {
+            clearInterval(i);
+        }, 100);
+    }
 }

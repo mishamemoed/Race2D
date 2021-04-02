@@ -11,8 +11,15 @@ function deviceReady() {
     const world = new World({
         width: window.innerWidth * ratio,
         height: window.innerHeight * ratio
-    }, LEVELS.ROAD_TEST);
+    }, LEVELS.DEMO1);
     world.controls = controls;
     world.start();
     new DatConfig(world);
+
+    document.addEventListener("click", (event) => {
+        let mouseX = event.offsetX * ratio + world.camera.x;
+        let mouseY = event.offsetY * ratio + world.camera.y;
+        console.log('mouseX: ', mouseX, 'mouseY: ', mouseY);
+    });
+    
 }
