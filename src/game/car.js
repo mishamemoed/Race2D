@@ -6,11 +6,27 @@ import _ from "lodash"
 export default class Car extends BaseObject {
     constructor(options) {
         super(options);
-        this.acceleration = 1
-        this.maxSpeed = 20
-        this.slidingFrictionCoefficient = SFC.DRY_ASPHALT
-        this.discarding = _.throttle(this.discarding, 1000)
+        this.acceleration = 0.1;
+        this.maxSpeed = 5;
+        this.slidingFrictionCoefficient = SFC.DRY_ASPHALT;
+        this.discarding = _.throttle(this.discarding, 1000);
+        this.rotateSpeed;
     }
+
+    updateRotateSpeed() {
+        let rp = this.speed / 3
+        rp = rp < 1 ? 1 : rp
+        this.rotateSpeed = rp
+    }
+
+    turnLeft() {
+        super.turnLeft(this.rotateSpeed)
+    }
+
+    turnRight() {
+        super.turnRight(this.rotateSpeed)
+    }
+
     onRender() {
         this.moveUp(this.speed);
         this.braking();
@@ -23,7 +39,7 @@ export default class Car extends BaseObject {
         } else {
             this.speed += acceleration
         }
-
+        this.updateRotateSpeed()
     }
 
     decreaseSpeed() {
@@ -33,19 +49,23 @@ export default class Car extends BaseObject {
         } else {
             this.speed -= acceleration
         }
+        this.updateRotateSpeed()
+
     }
 
     braking() {
         if (this.speed != 0) {
-            this.speed *= 1 - this.slidingFrictionCoefficient / 10
-            if (this.speed < 0.5 && this.speed > 0) {
+            this.speed *= 1 - this.slidingFrictionCoefficient / 50
+            if (this.speed < 0.01 && this.speed > 0) {
                 this.speed = 0
             }
         }
+        this.updateRotateSpeed()
+
     }
 
     checkCollision() {
-        const { roads, walls } = this.world
+        const { roads, walls, camera } = this.world
         roads.forEach(road => {
             if (this.collision(road)) {
                 this.slidingFrictionCoefficient = road.sfc
@@ -55,6 +75,7 @@ export default class Car extends BaseObject {
             if (this.collision(wall)) {
                 let edge = this.getEdge(wall)
                 this.discarding(edge)
+                camera.shake(1000, 10, this.speed / 3)
                 return true
             }
         }

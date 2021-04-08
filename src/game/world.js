@@ -1,4 +1,5 @@
 import Camera from "../system/camera";
+import EventBus from "../system/eventBus";
 import Car from "./car";
 import Road from "./road";
 import Wall from "./wall";
@@ -7,6 +8,7 @@ export default class World {
     constructor(options, initLevel) {
         this.options = options;
         const { canvas, domElement } = this.createCanvas(options);
+        this.eventBus = new EventBus()
         this.canvas = canvas;
         this.domElement = domElement;
         this.isRunning = false;
@@ -26,11 +28,14 @@ export default class World {
 
     createWall(options){
         const wall = new Wall({...options, world: this})
+        this.world.eventBus.subscribe(wall)
         return wall
     }
 
     createCar(options){
         const car = new Car({...options, world: this})
+        this.world.eventBus.subscribe(car)
+
         return car
     }
 

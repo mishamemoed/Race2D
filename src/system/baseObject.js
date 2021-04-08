@@ -28,7 +28,6 @@ export class BaseObject {
         this.isHealthShow = false;
         this.dropRadius = 100;
         this.moveDelay = 10;
-        this.subscribers = [];
         this.hints = [];
         this.hintCooldown = 500;
         this.defaultState = STAY;

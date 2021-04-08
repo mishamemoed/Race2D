@@ -11,7 +11,7 @@ function deviceReady() {
     const world = new World({
         width: window.innerWidth * ratio,
         height: window.innerHeight * ratio
-    }, LEVELS.DEMO1);
+    }, LEVELS.TRACK);
     world.controls = controls;
     world.start();
     new DatConfig(world);
