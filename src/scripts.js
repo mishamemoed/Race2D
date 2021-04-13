@@ -21,5 +21,4 @@ function deviceReady() {
         let mouseY = event.offsetY * ratio + world.camera.y;
         console.log('mouseX: ', mouseX, 'mouseY: ', mouseY);
     });
-    
 }

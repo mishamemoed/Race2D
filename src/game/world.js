@@ -8,7 +8,7 @@ export default class World {
     constructor(options, initLevel) {
         this.options = options;
         const { canvas, domElement } = this.createCanvas(options);
-        this.eventBus = new EventBus()
+        this.eventBus = new EventBus();
         this.canvas = canvas;
         this.domElement = domElement;
         this.isRunning = false;
@@ -21,22 +21,21 @@ export default class World {
             height: 100,
             speed: 0
         });
-        this.roads = []
-        this.walls = []
+        this.roads = [];
+        this.walls = [];
         this.loadLevel(initLevel);
     }
 
-    createWall(options){
-        const wall = new Wall({...options, world: this})
-        this.world.eventBus.subscribe(wall)
-        return wall
+    createWall(options) {
+        const wall = new Wall({ ...options, world: this });
+        this.eventBus.subscribe(wall);
+        return wall;
     }
 
-    createCar(options){
-        const car = new Car({...options, world: this})
-        this.world.eventBus.subscribe(car)
-
-        return car
+    createCar(options) {
+        const car = new Car({ ...options, world: this });
+        this.eventBus.subscribe(car);
+        return car;
     }
 
     loadLevel(level) {
@@ -44,19 +43,19 @@ export default class World {
         const { backgroundSrc, roads, walls, spawn } = level;
         this.background = new Image();
         this.background.src = backgroundSrc;
-        this.roads = roads.map(road => this.createRoad(road))
-        this.walls = walls.map(wall => this.createWall(wall))
-        this.player.x = spawn.x
-        this.player.y = spawn.y
-        this.player.angle = spawn.angle 
+        this.roads = roads.map(road => this.createRoad(road));
+        this.walls = walls.map(wall => this.createWall(wall));
+        this.player.x = spawn.x;
+        this.player.y = spawn.y;
+        this.player.angle = spawn.angle;
         this.createCamera();
     }
 
     createRoad(options) {
-        const newRoad = new Road(options)
-        newRoad.world = this
-        newRoad.setTexture(options.textureSrc, true, this.canvas)
-        return newRoad
+        const newRoad = new Road(options);
+        newRoad.world = this;
+        newRoad.setTexture(options.textureSrc, true, this.canvas);
+        return newRoad;
     }
 
     start() {
@@ -69,16 +68,16 @@ export default class World {
     }
 
     render = () => {
-        const { isRunning, canvas, options,
-            background, camera, player, controls } = this;
-        const { roads, walls } = this
+        const { isRunning, canvas, options, 
+                background, camera, player, controls } = this;
+        const { roads, walls } = this;
         const { width, height } = options;
         if (isRunning) requestAnimationFrame(this.render);
         canvas.save();
         canvas.translate(-camera.x, -camera.y);
         canvas.drawImage(background, 0, 0);
-        roads.forEach(road => road.render(canvas))
-        walls.forEach(wall => wall.render(canvas))
+        roads.forEach(road => road.render(canvas));
+        walls.forEach(wall => wall.render(canvas));
         player.render(canvas);
         camera.update();
         canvas.restore();
@@ -99,8 +98,7 @@ export default class World {
     createCamera() {
         const { level, player, domElement } = this;
         const { width, height } = level;
-        const { width: cWidth, height: cHeight } = domElement;
+        const { width: cWidth, height: cHeight } = domElement; 
         this.camera = new Camera(player, width, height, cWidth, cHeight);
     }
 }
-

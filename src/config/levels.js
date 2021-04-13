@@ -8,18 +8,14 @@ export const LEVELS = {
         height: 1024,
         roads: [],
         walls: [{
-            START_LINE:{
-                color: 'green',
-                width: 46,
-                height: 282,
-                x: 964,
-                y: 693,
-                background: true,
-                actions: [{
-                    event: EventType.COLLISION,
-                    action:"startRace"
-                }]
-        },
+            color: 'green',
+            width: 46,
+            height: 282,
+            x: 964,
+            y: 693,
+            background: true,
+            name: "start_line"
+        },{
             x: 0,
             y: -15,
             width: 2048,

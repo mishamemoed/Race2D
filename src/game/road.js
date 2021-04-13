@@ -27,6 +27,7 @@ export default class Road extends BaseObject{
         }
     }
     checkCollision() {
+        
     }
 }
 

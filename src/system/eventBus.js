@@ -1,17 +1,18 @@
-export default class EventBus{
-    constructor(){
-        this.subscribers = []
+export default class EventBus {
+    constructor() {
+        this.subscribers = [];
     }
 
-    subscribe(obj){
-        this.subscribers.push(obj)
+    subscribe(obj) {
+        this.subscribers.push(obj);
     }
 
-    unsubscribe(obj){
-        this.subscribers = this.subscribers.filter(s => s !== obj)
+    unsubscribe(obj) {
+        this.subscribers = this.subscribers.filter(s => s !== obj);
     }
 
-    fireEvent(event){
-        this.subscribers.forEach(s => s.notify(event))
+    fireEvent(event) {
+        console.log("New Event:" + event.type, event)
+        this.subscribers.forEach(s => s.notify(event));
     }
 }
