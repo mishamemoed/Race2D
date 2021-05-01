@@ -5,7 +5,7 @@ export default class DatConfig {
         const { camera, level, player } = world;
         const gui = new dat.GUI({
             width: 300,
-            closed: false
+            closed: true
         });
         gui.useLocalStorage = true;
         const cameraFolder = gui.addFolder("Camera props");
@@ -17,6 +17,10 @@ export default class DatConfig {
         playerFolder.add(player, "speed", 0.00000000001, level.maxSpeed).listen();
         playerFolder.add(player, "slidingFrictionCoefficient").listen();
         playerFolder.add(player, "angle").listen();
+        playerFolder.add(player.lapCounter, "currentCheckpoint").listen()
         playerFolder.add(player, "rotateSpeed", 0, player.maxSpeed).listen()
+        playerFolder.add(player.lapCounter, "checkpointCount").listen()
+        playerFolder.add(player.lapCounter, "currentLap").listen()
+        playerFolder.add(player.lapCounter, "lapsCount").listen()
     }
 }

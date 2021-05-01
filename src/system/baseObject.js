@@ -32,7 +32,7 @@ export class BaseObject {
         this.hintCooldown = 500;
         this.defaultState = STAY;
         for (const key of Object.keys(options)) {
-           this[key] = options[key];
+            this[key] = options[key];
         }
         if (options.imageSrc) {
             this.image = new Image();
@@ -171,13 +171,13 @@ export class BaseObject {
         const widthHealth = (this.width - 2 * margin) * ratio;
         const heightHealth = height - 2 * margin;
         canvas.fillStyle = "rgba(150, 0, 0, 0.7)";
-        canvas.fillRect(this.x + margin, y + margin, 
-                widthHealth, heightHealth);
+        canvas.fillRect(this.x + margin, y + margin,
+            widthHealth, heightHealth);
         let levelInfo = this.getLevel();
         canvas.font = "16px Comic Sans MS";
         canvas.fillStyle = "#ff0000";
         canvas.fillText(levelInfo.level,
-                        this.x + this.width + margin, y + 10);
+            this.x + this.width + margin, y + 10);
     }
 
     render(canvas) {
@@ -197,7 +197,7 @@ export class BaseObject {
             const { x, y, w, h, image } = frame;
             offsetX = offsetX ? offsetX : 0;
             offsetY = offsetY ? offsetY : 0;
-            canvas.drawImage(image, x + offsetX, y + offsetY, width, height, -hw, -hh, width, height);
+            canvas.drawImage(image, x + offsetX, y + offsetY, w, h, -hw, -hh, width, height);
         } else if (this.image) {
             let { offsetX, offsetY, image, width, height } = this;
             offsetX = offsetX ? offsetX : 0;
@@ -216,14 +216,12 @@ export class BaseObject {
         }
         this.renderHints(canvas);
     }
-
-    renderPoint(x, y, color) {
+    renderPoint(x, y, color, canvas) {
         canvas.fillStyle = color;
         canvas.beginPath();
         canvas.arc(x, y, 5, 0, Math.PI * 2, true);
         canvas.fill();
     }
-
     kill() {
         this.isDead = true;
         this.playSound("DEAD");
@@ -312,7 +310,7 @@ export class BaseObject {
     }
 
     moveXY(x, y) {
-        let angle = this.angleBetween({x, y});
+        let angle = this.angleBetween({ x, y });
         let direction = Math.round(angle / 90);
         this.moveDirection(direction);
     }
@@ -353,12 +351,12 @@ export class BaseObject {
         let beta = 90 - alpha;
         let gamma = Math.PI / 2;
         let deltaX = Math.sin(this.degToRad(beta)) * distance
-                     / Math.sin(gamma);
+            / Math.sin(gamma);
         let deltaY = Math.sin(this.degToRad(alpha)) * distance
-                     / Math.sin(gamma);
+            / Math.sin(gamma);
         return { deltaX, deltaY }
     }
-    
+
     degToRad(deg) {
         return deg * Math.PI / 180;
     }
@@ -379,32 +377,39 @@ export class BaseObject {
         return r1 || r2 || r3 || r4;
     }
 
+    getCenterPoint() {
+        let hw = this.width / 2;
+        let hh = this.height / 2;
+        let point = this.rotatePoint(hw, hh, this.angle);
+        return {x: point.x + this.x, y: point.y + this.y}
+    } 
+
     getRightTopPoint() {
         let hw = this.width / 2;
         let hh = this.height / 2;
         let point = this.rotatePoint(hw, -hh, this.angle);
-        return {x: point.x + this.x + hw, y: point.y + this.y + hh}
+        return { x: point.x + this.x + hw, y: point.y + this.y + hh }
     }
 
     getLeftBottomPoint() {
         let hw = this.width / 2;
         let hh = this.height / 2;
         let point = this.rotatePoint(-hw, hh, this.angle);
-        return {x: point.x + this.x + hw, y: point.y + this.y + hh}
+        return { x: point.x + this.x + hw, y: point.y + this.y + hh }
     }
 
     getLeftTopPoint() {
         let hw = this.width / 2;
         let hh = this.height / 2;
         let point = this.rotatePoint(-hw, -hh, this.angle);
-        return {x: point.x + this.x + hw, y: point.y + this.y + hh}
+        return { x: point.x + this.x + hw, y: point.y + this.y + hh }
     }
 
     getRightBottomPoint() {
         let hw = this.width / 2;
         let hh = this.height / 2;
         let point = this.rotatePoint(hw, hh, this.angle);
-        return {x: point.x + this.x + hw, y: point.y + this.y + hh}
+        return { x: point.x + this.x + hw, y: point.y + this.y + hh }
     }
 
     isPointInObject(point) {
@@ -424,7 +429,7 @@ export class BaseObject {
             && p1Y >= y && p1Y <= y + this.height) {
             return true;
         } else {
-            return false; 
+            return false;
         }
     }
 
@@ -432,6 +437,6 @@ export class BaseObject {
         let a = this.degToRad(angle);
         let x1 = x * Math.cos(a) - y * Math.sin(a);
         let y1 = x * Math.sin(a) + y * Math.cos(a);
-        return {x: x1, y: y1}
+        return { x: x1, y: y1 }
     }
 }

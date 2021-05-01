@@ -2,37 +2,42 @@ import { BaseObject } from "../system/baseObject";
 import { SFC } from "./road";
 import { EventType } from "../config/events";
 import _ from "lodash";
- 
+import LapCounter from "./lapcounter";
+
 export default class Car extends BaseObject {
     constructor(options) {
         super(options);
+        this.lapCounter = new LapCounter()
+        this.world.eventBus.subscribe(this.lapCounter)
         this.acceleration = 0.1;
-        this.maxSpeed = 5;
+        this.speed = 0;
+        this.headCrab
         this.rotateSpeed;
         this.slidingFrictionCoefficient = SFC.ICE;
         this.discarding = _.throttle(this.discarding, 1000);
-        this.fireEventCollision = _.throttle(this.fireEventCollision, 1000)
+        this.fireEventCollision = _.throttle(this.fireEventCollision, 1000, { 'trailing': false })
     }
- 
+
     updateRotateSpeed() {
         let rp = this.speed / 3;
         rp = rp < 1 ? 1 : rp;
         this.rotateSpeed = rp;
     }
- 
+
     turnLeft() {
         super.turnLeft(this.rotateSpeed);
     }
- 
+
     turnRight() {
         super.turnRight(this.rotateSpeed);
     }
- 
+
     onRender() {
         this.moveUp(this.speed);
         this.braking();
+        this.headCrab && this.headCrab.control()
     }
- 
+
     increaseSpeed() {
         const { acceleration, speed, maxSpeed } = this;
         if (speed + acceleration > maxSpeed) {
@@ -42,7 +47,7 @@ export default class Car extends BaseObject {
         }
         this.updateRotateSpeed();
     }
- 
+
     decreaseSpeed() {
         const { acceleration, speed } = this;
         if (speed - acceleration < acceleration / 2 && this.speed > 0) {
@@ -52,7 +57,7 @@ export default class Car extends BaseObject {
         }
         this.updateRotateSpeed();
     }
- 
+
     braking() {
         if (this.speed != 0) {
             this.speed *= 1 - this.slidingFrictionCoefficient / 50;
@@ -62,9 +67,15 @@ export default class Car extends BaseObject {
         }
         this.updateRotateSpeed();
     }
- 
+
     checkCollision() {
-        const { roads, walls, camera } = this.world;
+        const { roads, walls, camera, bots } = this.world;
+        for (let bot of bots) {
+            if (this != bot && this.collision(bot)) {
+                camera.shake(1000, 15, this.speed / 2);
+                return true;
+            }
+        }
         roads.forEach(road => {
             if (this.collision(road)) {
                 this.slidingFrictionCoefficient = road.sfc;
@@ -84,13 +95,13 @@ export default class Car extends BaseObject {
         }
     }
 
-    fireEventCollision(wall){
+    fireEventCollision(wall) {
         this.world.eventBus.fireEvent({
             type: EventType.COLLISION,
             name: wall.name
         });
     }
- 
+
     getEdge(object) {
         let r1 = object.isPointInObject(this.getRightBottomPoint());
         let r2 = object.isPointInObject(this.getLeftBottomPoint());
@@ -101,7 +112,7 @@ export default class Car extends BaseObject {
         if (r3) return "left-top";
         if (r4) return "right-top";
     }
- 
+
     discarding(edge) {
         console.log("Бабах");
         let i = setInterval(() => {
